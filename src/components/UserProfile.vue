@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { parseAndTranslateApiError } from '@/utils/apiUtils'
+import { useLocation } from '@/composables/useLocation'
 
 const props = defineProps(['apiUrl', 'token', 'userId', 'userRole'])
 const emit = defineEmits(['logout', 'account-deleted'])
@@ -8,6 +9,20 @@ const emit = defineEmits(['logout', 'account-deleted'])
 const editForm = ref({})
 const isLoading = ref(true)
 const feedback = ref({ message: '', type: '' })
+
+const { estados, cidades, carregarEstados, carregarCidades } = useLocation()
+
+onMounted(async () => {
+  
+  await carregarEstados()
+  
+  await fetchUserData()
+})
+
+function carregarCidadesMain() {
+  editForm.value.city = ''
+  carregarCidades(editForm.value.state)
+}
 
 function showMessage(msg, isError = false) {
   feedback.value = { message: msg, type: isError ? 'error' : 'success' }
@@ -25,6 +40,10 @@ async function fetchUserData() {
     const data = await response.json()
     
     editForm.value = { ...data, password: '' }
+
+    if (editForm.value.state) {
+        await carregarCidades(editForm.value.state)
+    }
   } catch (error) {
     showMessage(`Erro ao carregar: ${parseAndTranslateApiError(error)}`, true)
   } finally {
@@ -92,20 +111,41 @@ onMounted(() => {
 
     <form v-else @submit.prevent="handleUpdate" class="edit-form">
         <label>Nome:</label> <input v-model="editForm.name" required />
-        <label>Email:</label> <input v-model="editForm.email" required />
-        <label>Telefone:</label> <input v-model="editForm.phone" required />
         
         <template v-if="userRole === 'comum'">
             <label>Experiência:</label> <input v-model="editForm.experience" />
             <label>Educação:</label> <input v-model="editForm.education" />
+            <label>Email:</label> <input v-model="editForm.email" />
+            <label>Telefone:</label> <input v-model="editForm.phone" />
         </template>
         
         <template v-if="userRole === 'company'">
              <label>Ramo:</label> <input v-model="editForm.business" />
              <label>Endereço:</label> <input v-model="editForm.street" />
-             <label>Número:</label> <input v-model="editForm.number" />
-             <label>Cidade:</label> <input v-model="editForm.city" />
-             <label>Estado:</label> <input v-model="editForm.state" maxlength="2"/>
+             <label>Número:</label> <input v-model="editForm.number" pattern="[0-9]+" />
+
+            <div class="input-group">
+                <label>Estado:</label>
+                <select v-model="editForm.state" @change="carregarCidadesMain" required style="width: 100%; padding: 12px 10px; margin-bottom: 1.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                <option disabled value="">Selecione o Estado</option>
+                <option v-for="uf in estados" :key="uf.id" :value="uf.sigla">
+                    {{ uf.sigla }} - {{ uf.nome }}
+                </option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Cidade:</label>
+                <select v-model="editForm.city" required style="width: 100%; padding: 12px 10px; margin-bottom: 1.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                <option disabled value="">Selecione a Cidade</option>
+                <option v-for="city in cidades" :key="city.id" :value="city.nome">
+                    {{ city.nome }}
+                </option>
+                </select>
+            </div>
+        
+            <label>Email:</label> <input v-model="editForm.email" required/>
+            <label>Telefone:</label> <input v-model="editForm.phone" required/>
         </template>
 
         <label>Nova Senha:</label> <input v-model="editForm.password" type="password" placeholder="Opcional" />

@@ -4,6 +4,7 @@ import ConnectServer from './components/ConnectServer.vue'
 import AuthManager from './components/AuthManager.vue'
 import UserProfile from './components/UserProfile.vue'
 import JobsManager from './components/JobsManager.vue'
+import UserApplications from './components/UserApplications.vue'
 
 const apiUrl = ref('')
 const jwtToken = ref(null)
@@ -82,20 +83,20 @@ async function handleLogout() {
         @account-deleted="handleLogout"
       />
 
-      <div v-if="currentTab === 'jobs'">
-        <JobsManager 
-           :api-url="apiUrl"
-           :token="jwtToken"
-           :user-id="userId"
-           :user-role="userRole"
-        />
-      </div>
+      <JobsManager 
+        v-if="currentTab === 'jobs'"
+        :api-url="apiUrl"
+        :token="jwtToken"
+        :user-id="userId"
+        :user-role="userRole"
+      />
       
-      <div v-if="currentTab === 'apps'" class="form-container">
-         <h3>Minhas Candidaturas</h3>
-         <p>Em breve aqui listaremos as aplicações...</p>
-      </div>
-
+      <UserApplications
+        v-if="currentTab === 'apps'"
+        :api-url="apiUrl"
+        :token="jwtToken"
+        :user-id="userId"
+      />
     </div>
   </main>
 </template>
@@ -160,7 +161,7 @@ legend {
 }
 
 /* --- Inputs e Labels --- */
-input {
+input, select {
   margin-bottom: 15px;
   padding: 12px;
   width: 100%;
@@ -171,7 +172,7 @@ input {
   font-size: 1em;
 }
 
-input:focus {
+input:focus, select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
   outline: none;
@@ -295,4 +296,6 @@ a:hover {
   color: white;
   border-bottom: 2px solid var(--color-primary-dark);
 }
+
+
 </style>
