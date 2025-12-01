@@ -75,17 +75,29 @@ async function handleUpdate() {
 
 async function handleDelete() {
   if (!confirm('TEM CERTEZA? AÇÃO IRREVERSÍVEL.')) return
+  
   const endpoint = props.userRole === 'comum' ? `/users/${props.userId}` : `/companies/${props.userId}`;
+  
   try {
-    await fetch(`${props.apiUrl}${endpoint}`, {
+    const response = await fetch(`${props.apiUrl}${endpoint}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${props.token}` },
     })
+    
+    if (!response.ok) {
+      const error = await response.json()
+      throw error
+    }
+    
+    const data = await response.json()
+    
     emit('account-deleted')
+    
   } catch (error) {
-    showMessage(`Erro: ${parseAndTranslateApiError(error)}`, true)
+    showMessage(`Erro ao excluir conta: ${parseAndTranslateApiError(error)}`, true)
   }
 }
+
 
 onMounted(() => {
     fetchUserData();
