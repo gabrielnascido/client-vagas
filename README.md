@@ -1,70 +1,79 @@
-# client-vagas
+# Cliente da API de Vagas
 
-This template should help get you started developing with Vue 3 in Vite.
+Cliente web para sistema de gerenciamento de vagas de emprego, desenvolvido em Vue.js.
 
-## Recommended IDE Setup
+## 📋 Pré-requisitos
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Node.js (versão 16 ou superior)
+- npm ou yarn
+- Backend da API rodando (veja configuração abaixo)
 
-## Recommended Browser Setup
+## 🚀 Como Executar
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 1. Instalar Dependências
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 2. Executar em Modo de Desenvolvimento
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+O aplicativo estará disponível em `http://localhost:5173` (ou outra porta indicada no terminal).
 
-```sh
+### 3. Conectar ao Backend
+
+Na tela inicial, informe:
+- **IP do Servidor**: endereço onde o backend está rodando (ex: `localhost`)
+- **Porta**: porta do backend (ex: `21234`)
+
+Clique em **Conectar**.
+
+## 👥 Funcionalidades
+
+### Para Candidatos
+- Cadastro e autenticação
+- Busca de vagas com filtros (título, área, localização, salário)
+- Candidatura a vagas
+- Visualização de feedbacks recebidos
+- Gerenciamento de perfil
+
+### Para Empresas
+- Cadastro e autenticação
+- Criação e gerenciamento de vagas
+- Visualização de candidatos
+- Envio de feedbacks aos candidatos
+- Gerenciamento de perfil
+
+## 🛠️ Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+npm run dev
+
+# Build para produção
 npm run build
-```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+# Preview da build
+npm run preview
 
-```sh
+# Testes
 npm run test:unit
-```
 
-### Run End-to-End Tests with [Nightwatch](https://nightwatchjs.org/)
-
-```sh
-# When using CI, the project must be built first.
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chrome
-npm run test:e2e -- --env chrome
-# Runs the tests of a specific file
-npm run test:e2e -- tests/e2e/example.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-    
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+# Lint
 npm run lint
 ```
+
+## 📦 Tecnologias
+
+- Vue 3 (Composition API)
+- Vite
+- Vue Router
+- Pinia
+
+---
+
+**Nota**: Certifique-se de que o backend da aplicação está rodando antes de iniciar o cliente.
